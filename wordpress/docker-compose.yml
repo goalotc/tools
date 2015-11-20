@@ -1,0 +1,39 @@
+mysql:
+  image: mysql
+  container_name: mysql
+  environment:
+    MYSQL_ROOT_PASSWORD: password
+
+wordpress_1:
+  image: wordpress
+  container_name: wordpress_1
+  environment:
+    WORDPRESS_DB_NAME: blog1
+    WORDPRESS_DB_PASSWORD: password
+  links:
+    - mysql:mysql
+  ports:
+    - 8081:80
+
+wordpress_2:
+  image: wordpress
+  container_name: wordpress_2
+  environment:
+    WORDPRESS_DB_NAME: blog2
+    WORDPRESS_DB_PASSWORD: password
+  links:
+    - mysql:mysql
+  ports:
+    - 8083:80
+
+nginx:
+  image: nginx
+  container_name: nginx_proxy
+  links:
+    - wordpress_1
+    - wordpress_2
+  ports:
+    - 80:80
+    - 443:443
+  volumes:
+    - ./default.conf:/etc/nginx/conf.d/default.conf:ro
