@@ -6,6 +6,7 @@ nginx:
         - node3:node3
     ports:
         - "80:80"
+        - "443:443"
 node1:
     build: ./node
     links:
